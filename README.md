@@ -4,7 +4,7 @@
 
 This project is an **AI-powered Test Case Generator** built using **Java**, **Ollama (LLM)**, and **Apache POI**.
 
-It reads software requirements from **Word documents**, sends them to a **local LLM (qwen2.5:3b via Ollama)**, automatically generates structured **software test cases**, and exports them into an **Excel file**.
+It reads software requirements from **text files**, sends them to a **local LLM (qwen2.5:3b via Ollama)**, automatically generates structured **software test cases**, and exports them into an **Excel file**.
 
 The goal is to eliminate manual test case writing and accelerate QA workflows using AI.
 
@@ -21,14 +21,13 @@ This project is designed as an **SDET portfolio project** demonstrating:
 
 ## 🚀 Features
 
-✅ Read requirements from `.docx` files
-✅ Generate Positive & Negative Test Cases using AI
-✅ Enforced structured JSON output
+✅ Read requirements from .txt files
+✅ Generate Positive & Negative Test Cases using local LLM (Ollama)
+✅ Enforced structured JSON output (prompt-driven)
 ✅ Jackson object mapping
 ✅ Excel export via Apache POI
-✅ Handles LLM token limits safely
-✅ Detects truncated AI responses
-✅ Modular design
+✅ Configurable model parameters (temperature, token limit, streaming)
+✅ Modular Java design
 ✅ Ready for Selenium automation extension
 
 ---
@@ -154,7 +153,7 @@ mvn clean install
 From Eclipse or terminal:
 
 ```
-java -cp target/classes tcGenerator.generator.OllamaTest
+java -cp target/classes tcGenerator.ai.OllamaTest
 ```
 
 ---
@@ -164,7 +163,7 @@ java -cp target/classes tcGenerator.generator.OllamaTest
 Generated Excel appears inside:
 
 ```
-generator/output/TestCases.xlsx
+src/main/java/tcGenerator/generator/output/TestCases.xlsx
 ```
 
 Contains:
@@ -183,20 +182,6 @@ Contains:
 | ID     | Title                        | Type     | Steps                 | Expected Result | Priority |
 | ------ | ---------------------------- | -------- | --------------------- | --------------- | -------- |
 | TC_001 | Login with valid credentials | Positive | Enter email, password | Login success   | High     |
-
----
-
-## 🧠 AI Safety Handling
-
-The system detects LLM truncation:
-
-```
-done_reason = length
-```
-
-and fails fast if JSON is incomplete.
-
-Token limits are increased dynamically.
 
 ---
 
