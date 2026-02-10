@@ -1,5 +1,9 @@
 # 🧠 AI Test Case Generator (Java + Ollama + Selenium)
 
+![Java](https://img.shields.io/badge/Java-17+-orange)
+![AI](https://img.shields.io/badge/AI-Ollama-Yellow)
+![Build](https://img.shields.io/badge/Build-Maven-brightgreen)
+
 ## Overview
 
 This project is an **AI-powered Test Case Generator** built using **Java**, **Ollama (LLM)**, and **Apache POI**.
