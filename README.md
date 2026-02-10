@@ -26,12 +26,19 @@ This project is designed as an **SDET portfolio project** demonstrating:
 ## 🚀 Features
 
 ✅ Read requirements from .txt files
+
 ✅ Generate Positive & Negative Test Cases using local LLM (Ollama)
+
 ✅ Enforced structured JSON output (prompt-driven)
+
 ✅ Jackson object mapping
+
 ✅ Excel export via Apache POI
+
 ✅ Configurable model parameters (temperature, token limit, streaming)
+
 ✅ Modular Java design
+
 ✅ Ready for Selenium automation extension
 
 ---
