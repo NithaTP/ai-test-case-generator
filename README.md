@@ -45,3 +45,77 @@ This project helps QA engineers move from **manual effort → AI-assisted produc
 
 ## 📂 Project Structure
 
+ai-test-case-generator
+│
+├── src/main/java/tcGenerator
+│ ├── ai
+│ │ ├── OllamaClient.java
+│ │ └── OllamaTest.java
+│ ├── generator
+│
+├── src/main/resources/requirement
+│ ├── login.txt
+│ └── NewRequirement.txt
+│
+├── pom.xml
+└── README.md
+
+
+---
+
+## ⚙️ Installation Guide
+
+### 1️⃣ Install Java
+
+```bash
+java -version
+2️⃣ Install Maven
+mvn -version
+3️⃣ Install Ollama
+Download from:
+
+https://ollama.com
+
+Run model:
+
+ollama run llama3
+▶️ How To Run
+Start Ollama
+ollama run llama3
+Build Project
+mvn clean install
+Run Application
+mvn exec:java -Dexec.mainClass="tcGenerator.ai.OllamaTest"
+🧠 How It Works
+Requirement File
+⬇
+Java Application
+⬇
+Ollama Local API
+⬇
+LLM Generates Test Cases
+⬇
+Structured Output
+
+🎯 Key Features
+✔ Fully local AI execution
+✔ Clean modular Java structure
+✔ Maven-based build system
+✔ Easy to extend for UI or API integration
+
+🚀 Future Enhancements
+Web UI for requirement input
+
+Direct Excel export module
+
+REST API wrapper
+
+CI/CD integration
+
+Cloud deployment option
+
+👩‍💻 Author
+NithaTP
+GitHub: https://github.com/NithaTP
+
+<p align="center"> ⭐ If you like this project, consider giving it a star! </p> ```
