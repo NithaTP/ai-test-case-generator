@@ -3,4 +3,7 @@
 /.classpath
 /.project
 /.settings
+/.vscode
+/output
+*.xlsx
 *.log

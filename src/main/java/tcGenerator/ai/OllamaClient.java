@@ -27,12 +27,13 @@ public class OllamaClient {
             // Build request safely
             Map<String, Object> body = new HashMap<>();
             body.put("model", "qwen2.5:3b");
-            body.put("prompt", prompt);
+            body.put("prompt", prompt + "\n\nGeneration ID: " + System.currentTimeMillis());
             body.put("stream", false);
             body.put("format", "json");
 
             Map<String, Object> options = new HashMap<>();
-            options.put("temperature", 0);
+            options.put("temperature", 0.8);
+            options.put("top_p", 0.9);  
             options.put("num_predict", 4096);
             
             body.put("options", options);

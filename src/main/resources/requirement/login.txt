@@ -1,4 +1,9 @@
-User should be able to login using email and password.
-Email is mandatory.
-Password must be at least 8 characters.
-Invalid credentials should show an error message.
+1️⃣ Access to Payment Page
+
+User should be able to access the Payment page only after adding at least one product to the cart.
+
+User should be able to access the Payment page only after providing a valid shipping address.
+
+If cart is empty, user should be redirected to the Cart page.
+
+Order summary should be displayed before payment.

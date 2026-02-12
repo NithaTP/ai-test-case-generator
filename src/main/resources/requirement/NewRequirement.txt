@@ -1,260 +1,303 @@
 Functional Requirements Document
 
-Feature Scope: User Login → Product Selection → Checkout → Order Placement
+Feature Scope: User Login → Product Selection → Checkout → Payment Gateway → Order Confirmation
 
-1. User Authentication (Login Using Username and Password)
+1. Payment Gateway Integration
 1.1 Purpose
 
-To allow registered users to securely access the application by validating their credentials.
+To allow users to securely complete online payments using supported payment methods and confirm order placement.
 
-1.2 Login Page Components
+2. Payment Page
+2.1 Navigation to Payment Page
 
-The system shall provide a Login Page containing:
+User shall be redirected to the Payment Page after successful validation of shipping details.
 
-Username input field
+Payment Page shall display Order Summary before payment processing.
 
-Password input field (masked characters)
+User shall not access Payment Page if cart is empty.
 
-Login button
+If session expires, user shall be redirected to Login Page.
 
-Optional “Forgot Password” link
+2.2 Payment Page Components
 
-Validation message area
+The system shall provide the following components:
 
-1.3 Username Field Requirements
+Order Summary section
 
-Shall accept alphanumeric characters.
+Payment method selection options
 
-Shall not allow empty submission.
+Payment details input form (dynamic based on method)
 
-Shall trim leading and trailing spaces automatically.
+“Pay Now” button
 
-Shall display an inline validation message if left blank.
+“Cancel Payment” button
 
-Maximum length: configurable (default 50 characters).
+Error/Status message display area
 
-1.4 Password Field Requirements
+Secure transaction indicator (HTTPS/lock icon)
 
-Shall mask entered characters.
+3. Order Summary Section
+3.1 Display Requirements
 
-Shall not allow empty submission.
-
-Minimum length: configurable (default 8 characters).
-
-Maximum length: configurable (default 32 characters).
-
-Shall support special characters.
-
-Shall display an error if requirements are not met.
-
-1.5 Login Button Behavior
-
-Shall remain disabled until both fields contain input.
-
-On click, shall submit credentials to the authentication service.
-
-Shall display a loading indicator during validation.
-
-1.6 Authentication Validation
-
-The system shall:
-
-Verify username exists.
-
-Match password with stored encrypted password.
-
-Reject invalid credentials with message:
-
-“Invalid username or password.”
-
-Allow a maximum of configurable failed attempts (default: 5).
-
-Lock account temporarily after exceeding attempts.
-
-1.7 Successful Login
-
-On successful authentication:
-
-User session shall be created.
-
-Authentication token shall be stored securely.
-
-User shall be redirected to the Products Page.
-
-User identity shall be maintained throughout navigation.
-
-1.8 Unauthorized Access Handling
-
-Any attempt to access internal pages without login shall redirect to Login Page.
-
-2. Product Listing Page
-2.1 Purpose
-
-To display available products and allow users to add items to their cart.
-
-2.2 Product Display Requirements
-
-Each product shall display:
-
-Product image
+The system shall display:
 
 Product name
 
-Product description
+Quantity
 
 Unit price
-
-Availability status
-
-“Add to Cart” button
-
-2.3 Product Loading
-
-Products shall be fetched from backend database.
-
-Page shall support pagination or lazy loading.
-
-If products fail to load, system shall show error message.
-
-3. Add Product to Cart
-3.1 Add to Cart Functionality
-
-When user clicks “Add to Cart”:
-
-Selected product shall be added to cart.
-
-Quantity shall default to 1.
-
-Cart icon count shall update immediately.
-
-Confirmation toast/message shall appear.
-
-3.2 Cart Rules
-
-Same product added multiple times shall increase quantity.
-
-User may add multiple different products.
-
-Cart data shall persist during session.
-
-3.3 Cart Contents
-
-Cart shall display:
-
-Product name
-
-Unit price
-
-Quantity selector (+ / –)
 
 Subtotal per item
 
-Remove item option
+Tax amount
 
-Total order amount
+Shipping charges
 
-4. Checkout Page
-4.1 Navigation to Checkout
+Discount (if applicable)
 
-Checkout button shall be enabled only if cart is not empty.
+Final payable amount
 
-Clicking Checkout redirects user to Checkout Page.
+3.2 Calculation Rules
 
-4.2 Checkout Page Components
+Final amount shall be calculated dynamically.
 
-Checkout Page shall display:
+Any applied coupon shall be reflected immediately.
 
-List of selected products
+Total amount shall not be editable by user.
 
-Quantity per product
+4. Payment Methods
+4.1 Available Payment Options
 
-Individual price
+The system shall support:
 
-Subtotals
+Credit Card
 
-Grand total
+Debit Card
 
-Shipping information form
+UPI
 
-Place Order button
+Net Banking
 
-4.3 Shipping Information
+Digital Wallet
 
-User shall enter:
+Cash on Delivery (if enabled)
 
-Full name
+At least one payment method must be selected before proceeding.
 
-Address line 1
+5. Credit / Debit Card Payment
+5.1 Card Form Components
 
-Address line 2 (optional)
+The system shall provide:
 
-City
+Card Number field
 
-State
+Cardholder Name field
 
-Postal code
+Expiry Date field
 
-Phone number
+CVV field
 
-All required fields shall be validated before proceeding.
+“Save Card” checkbox (optional)
 
-4.4 Validation Rules
+5.2 Card Validation Rules
 
-No mandatory field may be empty.
+Card Number:
 
-Postal code shall follow country format.
+Shall accept numeric values only.
 
-Phone number must be numeric.
+Shall be 13–19 digits (configurable).
 
-Error messages shall appear inline.
+Shall validate using Luhn algorithm.
 
-5. Place Order
-5.1 Place Order Button
+Shall not allow empty submission.
 
-Shall remain disabled until shipping form is valid.
+Cardholder Name:
 
-On click, system shall submit order details to backend.
+Shall accept alphabets and spaces.
 
-5.2 Order Processing
+Shall not allow empty submission.
 
-System shall:
+Expiry Date:
 
-Validate cart items availability.
+Shall follow MM/YY format.
 
-Calculate final total.
+Shall not allow past date.
 
-Generate unique Order ID.
+CVV:
 
-Store order in database.
+Shall be masked.
 
-Mark products as reserved/sold.
+Shall accept only numeric values.
 
-5.3 Successful Order Placement
+Shall be 3 digits (4 digits for AMEX).
 
-Upon success:
+Inline validation messages shall appear for invalid input.
 
-Confirmation page shall be displayed.
+6. UPI Payment
+6.1 UPI Entry
 
-Order ID shall be shown.
+User shall enter valid UPI ID (format: example@bank).
 
-Summary of purchased items shall be visible.
+System shall validate UPI format before submission.
+
+QR code option shall be displayed if supported.
+
+6.2 UPI Processing
+
+Payment request shall be sent to UPI gateway.
+
+Transaction shall timeout after configurable duration (default: 5 minutes).
+
+If not completed within time, transaction shall be marked as failed.
+
+7. Net Banking Payment
+
+User shall select bank from dropdown list.
+
+Bank list shall be searchable.
+
+On selection, user shall be redirected to bank authentication page.
+
+After bank confirmation, user shall be redirected back to application.
+
+8. Wallet Payment
+
+User shall select available wallet provider.
+
+System shall redirect to wallet provider login page.
+
+Insufficient wallet balance shall display error.
+
+On successful authorization, user shall return to confirmation page.
+
+9. Pay Now Button Behavior
+
+Pay Now button shall remain disabled until all required payment fields are valid.
+
+On click:
+
+Button shall be disabled to prevent duplicate transactions.
+
+Loading indicator shall appear.
+
+Payment details shall be sent securely to payment gateway.
+
+10. Payment Processing
+10.1 Transaction Handling
+
+The system shall:
+
+Generate unique Transaction ID.
+
+Send encrypted payment data to gateway.
+
+Await success/failure response.
+
+Log transaction details.
+
+10.2 Duplicate Protection
+
+Multiple rapid clicks shall not create multiple transactions.
+
+System shall handle gateway retry safely.
+
+11. Payment Success
+
+Upon successful payment:
+
+“Payment Successful” message shall be displayed.
+
+Unique Order ID shall be generated.
+
+Order status shall be marked as “Confirmed”.
+
+Confirmation email shall be sent.
+
+Invoice shall be generated.
 
 Cart shall be cleared automatically.
 
-5.4 Failure Handling
+12. Payment Failure
 
-If order fails:
+If payment fails:
 
-Error message shall be shown.
+Failure message shall be displayed.
+
+Reason (if available) shall be shown without exposing sensitive details.
+
+Order status shall be marked as “Payment Failed”.
+
+User shall be allowed to retry payment.
 
 Cart shall remain intact.
 
-User may retry submission.
+13. Payment Cancellation
 
-6. Session End
+If user cancels payment:
 
-User may log out manually.
+User shall be redirected back to Payment Page.
 
-Session shall expire automatically after configurable idle time.
+Order shall not be confirmed.
+
+Cart shall not be cleared.
+
+14. Refund Management
+14.1 Admin Refund
+
+Admin shall be able to initiate refund from order management panel.
+
+Refund request shall be sent to payment gateway.
+
+Refund status shall be updated in system.
+
+14.2 User Notification
+
+User shall receive refund confirmation email.
+
+Refund processing timeline shall be displayed (e.g., 5–7 business days).
+
+15. Security Requirements
+
+All payment communication shall use HTTPS.
+
+Payment data shall be encrypted in transit.
+
+Sensitive fields shall not be logged.
+
+System shall comply with PCI-DSS.
+
+Session shall expire after configurable idle time (default: 15 minutes).
+
+16. Performance Requirements
+
+Payment page shall load within 3 seconds.
+
+Transaction processing shall complete within 10 seconds.
+
+System shall support concurrent transactions without failure.
+
+17. Audit & Logging
+
+System shall log:
+
+Order ID
+
+Transaction ID
+
+Payment Method
+
+Timestamp
+
+Amount
+
+Status (Success / Failed / Cancelled)
+
+Logs shall be accessible to admin users only.
+
+18. Session Termination
+
+User may logout manually.
 
 After logout, user must re-authenticate.
+
+Active payment attempt shall be cancelled if session expires.

@@ -7,51 +7,101 @@ import tcGenerator.model.OllamaResponse;
 import tcGenerator.model.TestCase;
 import tcGenerator.util.FileUtil;
 
+import java.io.File;
+import java.util.List;
+
 public class OllamaTest {
 
-	public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
-		String requirementText = FileUtil.readFile("src/main/resources/requirement/NewRequirement.txt");
-		System.out.println("requirementText: " + requirementText);
+        try {
 
-		String prompt = "You are a Senior QA Automation Engineer.\n\n" +
+            // 1️⃣ Read requirement file
+            String requirementText = FileUtil.readFile("src/main/resources/requirement/NewRequirement.txt");
+            System.out.println("Requirement loaded successfully.\n");
 
-				"Generate COMPLETE software test cases covering ALL modules:\n" + "1. Login\n" + "2. Product Listing\n"
-				+ "3. Add to Cart\n" + "4. Checkout\n" + "5. Order Placement\n\n" +
+            // 2️⃣ Build Prompt
+            String prompt =
+                    "You are a Senior QA Automation Engineer.\n\n" +
+                    "Generate COMPLETE software test cases covering ALL modules:\n" +
+                    "1. Login\n" +
+                    "2. Product Listing\n" +
+                    "3. Add to Cart\n" +
+                    "4. Checkout\n" +
+                    "5. Order Placement\n\n" +
+                    "Include BOTH positive and negative scenarios for EACH module.\n\n" +
+                    "IMPORTANT RULES:\n" +
+                    "- Do NOT focus only on Login.\n" +
+                    "- Every feature must have test cases.\n" +
+                    "- Output VALID JSON only.\n" +
+                    "- No explanations outside JSON.\n\n" +
+                    "Return JSON STRICTLY in this structure:\n\n" +
+                    "{\n" +
+                    "  \"testCases\": [\n" +
+                    "    {\n" +
+                    "      \"id\": \"TC_1\",\n" +
+                    "      \"title\": \"<short title>\",\n" +
+                    "      \"type\": \"positive|negative\",\n" +
+                    "      \"steps\": [\"step1\", \"step2\"],\n" +
+                    "      \"expectedResult\": \"result\",\n" +
+                    "      \"priority\": \"High|Medium|Low\"\n" +
+                    "    }\n" +
+                    "  ]\n" +
+                    "}\n\n" +
+                    "Generate MULTIPLE test cases per module.\n\n" +
+                    "Requirement:\n" + requirementText;
 
-				"Include BOTH positive and negative scenarios for EACH module.\n\n" +
+            // 3️⃣ Call Ollama
+            String rawResponse = OllamaClient.generate(prompt);
+            System.out.println("AI Response received.\n");
 
-				"IMPORTANT RULES:\n" + "- Do NOT focus only on Login.\n" + "- Every feature must have test cases.\n"
-				+ "- Output VALID JSON only.\n" + "- No explanations outside JSON.\n\n" +
+            ObjectMapper mapper = new ObjectMapper();
 
-				"Return JSON STRICTLY in this structure:\n\n" +
+            OllamaResponse ollama =
+                    mapper.readValue(rawResponse, OllamaResponse.class);
 
-				"{\n" + "  \"testCases\": [\n" + "    {\n" + "      \"id\": \"TC_1\",\n"
-				+ "      \"title\": \"<short title>\",\n" + "      \"type\": \"positive|negative\",\n"
-				+ "      \"steps\": [\"step1\", \"step2\"],\n" + "      \"expectedResult\": \"result\",\n"
-				+ "      \"priority\": \"High|Medium|Low\"\n" + "    }\n" + "  ]\n" + "}\n\n" +
+            FinalResponse finalResponse =
+                    mapper.readValue(ollama.getResponse(), FinalResponse.class);
 
-				"Generate MULTIPLE test cases per module.\n\n" +
+            List<TestCase> testCases = finalResponse.getTestCases();
 
-				"Requirement:\n" + requirementText;
+            if (testCases == null || testCases.isEmpty()) {
+                System.out.println("No test cases generated!");
+                return;
+            }
 
-		String rawResponse = OllamaClient.generate(prompt);
-		System.out.println("Response : " + rawResponse);
+            System.out.println("Generated Test Cases: " + testCases.size());
 
-		ObjectMapper mapper = new ObjectMapper();
+            // 4️⃣ Print to console
+            for (TestCase tc : testCases) {
+                System.out.println(
+                        tc.getId() + " | " +
+                        tc.getTitle() + " | " +
+                        tc.getType() + " | " +
+                        tc.getExpectedResult() + " | " +
+                        tc.getPriority()
+                );
+            }
 
-		OllamaResponse ollama = mapper.readValue(rawResponse, OllamaResponse.class);
+            // 5️⃣ Save Excel to TARGET folder (Correct Location)
+            String fileName = "CERtestcases_" + System.currentTimeMillis() + ".xlsx";
+            String folderPath = "target/output/";
 
-		FinalResponse finalResponse = mapper.readValue(ollama.getResponse(), FinalResponse.class);
-		System.out.println("Final formatted response : " + finalResponse);
+            File folder = new File(folderPath);
+            if (!folder.exists()) {
+                folder.mkdirs(); // create directory automatically
+            }
 
-		System.out.println("======= FINAL TEST CASES =======");
+            String fullPath = folderPath + fileName;
 
-		for (TestCase tc : finalResponse.getTestCases()) {
-			System.out.println(tc.getId() + " | " + tc.getTitle() + " | " + tc.getType() + " | " + tc.getSteps() + " | "
-					+ tc.getExpectedResult() + " | " + tc.getPriority());
-		}
-		ExcelExporter.export(finalResponse.getTestCases(),
-				"src/main/java/tcGenerator/generator/output/CERtestcases.xlsx");
-	}
+            ExcelExporter.export(testCases, fullPath);
+
+            System.out.println("\nExcel successfully created at:");
+            System.out.println(new File(fullPath).getAbsolutePath());
+
+        } catch (Exception e) {
+            System.err.println("ERROR OCCURRED:");
+            e.printStackTrace();
+        }
+    }
 }
