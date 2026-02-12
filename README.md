@@ -1,223 +1,150 @@
-# 🧠 AI Test Case Generator (Java + Ollama + Selenium)
+AI Test Case Generator
 
-![Java](https://img.shields.io/badge/Java-17+-orange)
-![AI](https://img.shields.io/badge/AI-Ollama-Yellow)
-![Build](https://img.shields.io/badge/Build-Maven-brightgreen)
+An AI-powered test case generation tool built using Java, Maven, and Ollama (Local LLM).
 
-## Overview
+This project reads software requirements from text files and automatically generates structured test cases using a locally running Large Language Model.
 
-This project is an **AI-powered Test Case Generator** built using **Java**, **Ollama (LLM)**, and **Apache POI**.
+📌 Project Overview
 
-It reads software requirements from **text files**, sends them to a **local LLM (qwen2.5:3b via Ollama)**, automatically generates structured **software test cases**, and exports them into an **Excel file**.
+Manual test case writing is time-consuming and repetitive.
+This project automates that process using AI.
 
-The goal is to eliminate manual test case writing and accelerate QA workflows using AI.
+It:
 
-This project is designed as an **SDET portfolio project** demonstrating:
+📄 Reads requirement files
 
-* AI integration
-* Java automation
-* JSON processing
-* Excel generation
-* Clean architecture
-* Production-grade error handling
+🤖 Sends them to Ollama (local LLM)
 
----
+🧠 Generates intelligent test cases
 
-## 🚀 Features
+📊 Exports results into structured format (Excel-ready)
 
-✅ Read requirements from .txt files
+Built for QA engineers who want to move from manual effort → AI-assisted productivity.
 
-✅ Generate Positive & Negative Test Cases using local LLM (Ollama)
+🛠 Tech Stack
 
-✅ Enforced structured JSON output (prompt-driven)
+Java 21
 
-✅ Jackson object mapping
+Maven
 
-✅ Excel export via Apache POI
+Ollama (Local LLM - llama3)
 
-✅ Configurable model parameters (temperature, token limit, streaming)
+REST API Integration
 
-✅ Modular Java design
+Excel Output Handling
 
-✅ Ready for Selenium automation extension
-
----
-
-## 🏗 Architecture
-
-```
-text requirement file (.txt)
-        ↓
-    Java Reader
-        ↓
-     Ollama API
-        ↓
-   Structured JSON
-        ↓
-   Java POJO Mapping
-        ↓
-    Excel Export
-```
-
----
-
-## 🛠 Tech Stack
-
-* Java 8+
-* Ollama (qwen2.5:3b model)
-* Jackson (JSON Parsing)
-* Apache POI (Excel)
-* Maven
-* Selenium (ready for future extension)
-
----
-
-## 📂 Flow Diagram:
-
-<img width="1333" height="177" alt="AI_Test_Case_Generator_flowDiagram" src="https://github.com/user-attachments/assets/22585321-dbad-45d8-81f0-0108c173ed00" />
-
-```
-
-```
-## 📂 Project Structure
-
-```
-src/main/java
+📂 Project Structure
+ai-test-case-generator
 │
-├── tcGenerator.ai
-│   ├── OllamaClient.java        # Calls Ollama API
-│   └── OllamaTest.java         # Main runner
+├── src/main/java/tcGenerator
+│   ├── ai
+│   │   ├── OllamaClient.java
+│   │   └── OllamaTest.java
+│   ├── generator
 │
-├── tcGenerator.exporter
-│   └── ExcelExporter.java      # Writes Excel output
+├── src/main/resources
+│   └── requirement
+│       ├── login.txt
+│       └── NewRequirement.txt
 │
-├── tcGenerator.generator.output
-│   ├── CERtestcases.xlsx
-│   └── testcases.xlsx         # Generated files
-│
-├── tcGenerator.model
-│   ├── FinalResponse.java     # Root AI response
-│   ├── OllamaResponse.java    # Raw Ollama wrapper
-│   └── TestCase.java          # Test Case POJO
-│
-├── tcGenerator.parser
-│   └── RequirementParser.java # Reads requirement text
-│
-└── tcGenerator.util
-    └── FileUtil.java          # File helpers
+├── pom.xml
+├── .gitignore
+└── README.md
 
-src/main/resources
-└── requirement
-    ├── login.txt
-    └── NewRequirement.txt     # Input requirements
+⚙️ Installation & Setup
+1️⃣ Install Java
 
-pom.xml
+Check:
 
-```
+java -version
 
----
 
-## ⚙ How to Run
+If not installed, download JDK 21.
 
-### 1️⃣ Install Ollama
+2️⃣ Install Maven
 
-Download:
+Check:
 
-[https://ollama.com](https://ollama.com)
+mvn -version
 
-Pull model:
+3️⃣ Install Ollama
 
-```
-ollama pull qwen2.5:3b
-```
+Download from:
 
-Ensure service is running:
+https://ollama.com
 
-```
-http://localhost:11434
-```
 
----
+After installation, run:
 
-### 2️⃣ Clone Project
+ollama run llama3
 
-```
-git clone https://github.com/YOUR_USERNAME/test-case-generator.git
-cd test-case-generator
-```
 
----
+This downloads the model locally.
 
-### 3️⃣ Add Requirement
+▶️ How to Run the Project
+Step 1 — Start Ollama
 
-Place your requirement file here:
+Open a new terminal:
 
-```
-src/main/resources/requirement/login.txt
-```
+ollama run llama3
 
----
 
-### 4️⃣ Build
+Keep it running.
 
-```
+Step 2 — Build the Project
+
+Inside project folder:
+
 mvn clean install
-```
 
----
 
-### 5️⃣ Run Generator
+You should see:
 
-From Eclipse or terminal:
+BUILD SUCCESS
 
-```
-java -cp target/classes tcGenerator.ai.OllamaTest
-```
+Step 3 — Run the Application
+mvn exec:java -Dexec.mainClass="tcGenerator.ai.OllamaTest"
 
----
 
-## 📤 Output
+The application will:
 
-Generated Excel appears inside:
+Read requirement file
 
-```
-src/main/java/tcGenerator/generator/output/TestCases.xlsx
-```
+Send prompt to Ollama
 
-Contains:
+Generate AI test cases
 
-* ID
-* Title
-* Type
-* Steps
-* Expected Result
-* Priority
+Output results
 
----
+🧠 How It Works
 
-## 🧪 Sample Test Case Output
+Requirement file is loaded from resources
 
-| ID     | Title                        | Type     | Steps                 | Expected Result | Priority |
-| ------ | ---------------------------- | -------- | --------------------- | --------------- | -------- |
-| TC_001 | Login with valid credentials | Positive | Enter email, password | Login success   | High     |
+Prompt is structured for test case generation
 
----
+Ollama API is called locally
 
-## 📌 Future Enhancements
+AI response is parsed
 
-* Auto Selenium Test Generation
-* CI Pipeline Integration
-* Test Case Tagging
-* Streaming LLM Responses
+Test cases are structured for output
+💡 Why This Project Matters
 
----
+This project demonstrates:
 
-## 👨‍💻 Author
+AI + QA integration
 
-Built by an SDET engineer as a production-quality AI automation portfolio project.
+LLM API handling in Java
 
----
+Real-world automation thinking
 
-⭐ If this project helps you — star the repo!
+Transition from manual QA to AI-driven QA
 
----
+👤 Author
+
+NithaTP
+
+GitHub: https://github.com/NithaTP
+
+⭐ If You Like This Project
+
+Star the repository and connect with me to collaborate on AI + Automation projects.
