@@ -1,150 +1,47 @@
-AI Test Case Generator
+<h1 align="center">🚀 AI Test Case Generator</h1>
 
-An AI-powered test case generation tool built using Java, Maven, and Ollama (Local LLM).
+<p align="center">
+AI-powered test case generation using <b>Java + Maven + Ollama (Local LLM)</b>
+</p>
 
-This project reads software requirements from text files and automatically generates structured test cases using a locally running Large Language Model.
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-21-orange?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Maven-Build-blue?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Ollama-LLM-green?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Status-Active-success?style=for-the-badge" />
+</p>
 
-📌 Project Overview
+---
 
-Manual test case writing is time-consuming and repetitive.
-This project automates that process using AI.
+## ✨ About The Project
 
-It:
+**AI Test Case Generator** is a Java-based automation tool that reads requirement files and generates structured test cases using a locally running Large Language Model via Ollama.
 
-📄 Reads requirement files
+This project helps QA engineers move from **manual effort → AI-assisted productivity**.
 
-🤖 Sends them to Ollama (local LLM)
+---
 
-🧠 Generates intelligent test cases
+## 🔥 What It Does
 
-📊 Exports results into structured format (Excel-ready)
+- 📄 Reads requirement input files  
+- 🤖 Sends structured prompts to Ollama  
+- 🧠 Generates intelligent test cases  
+- ⚡ Automates repetitive QA documentation  
+- 🔒 Runs fully locally (no cloud required)
 
-Built for QA engineers who want to move from manual effort → AI-assisted productivity.
+---
 
-🛠 Tech Stack
+## 🛠 Tech Stack
 
-Java 21
+| Technology | Role |
+|------------|------|
+| **Java 21** | Core application logic |
+| **Maven** | Build management |
+| **Ollama (llama3)** | Local AI model |
+| **REST API** | LLM communication |
+| **Excel Processing** | Structured output |
 
-Maven
+---
 
-Ollama (Local LLM - llama3)
+## 📂 Project Structure
 
-REST API Integration
-
-Excel Output Handling
-
-📂 Project Structure
-ai-test-case-generator
-│
-├── src/main/java/tcGenerator
-│   ├── ai
-│   │   ├── OllamaClient.java
-│   │   └── OllamaTest.java
-│   ├── generator
-│
-├── src/main/resources
-│   └── requirement
-│       ├── login.txt
-│       └── NewRequirement.txt
-│
-├── pom.xml
-├── .gitignore
-└── README.md
-
-⚙️ Installation & Setup
-1️⃣ Install Java
-
-Check:
-
-java -version
-
-
-If not installed, download JDK 21.
-
-2️⃣ Install Maven
-
-Check:
-
-mvn -version
-
-3️⃣ Install Ollama
-
-Download from:
-
-https://ollama.com
-
-
-After installation, run:
-
-ollama run llama3
-
-
-This downloads the model locally.
-
-▶️ How to Run the Project
-Step 1 — Start Ollama
-
-Open a new terminal:
-
-ollama run llama3
-
-
-Keep it running.
-
-Step 2 — Build the Project
-
-Inside project folder:
-
-mvn clean install
-
-
-You should see:
-
-BUILD SUCCESS
-
-Step 3 — Run the Application
-mvn exec:java -Dexec.mainClass="tcGenerator.ai.OllamaTest"
-
-
-The application will:
-
-Read requirement file
-
-Send prompt to Ollama
-
-Generate AI test cases
-
-Output results
-
-🧠 How It Works
-
-Requirement file is loaded from resources
-
-Prompt is structured for test case generation
-
-Ollama API is called locally
-
-AI response is parsed
-
-Test cases are structured for output
-💡 Why This Project Matters
-
-This project demonstrates:
-
-AI + QA integration
-
-LLM API handling in Java
-
-Real-world automation thinking
-
-Transition from manual QA to AI-driven QA
-
-👤 Author
-
-NithaTP
-
-GitHub: https://github.com/NithaTP
-
-⭐ If You Like This Project
-
-Star the repository and connect with me to collaborate on AI + Automation projects.
